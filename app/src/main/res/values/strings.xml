@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Wolfram | Beta</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_rsa">RSA</string>
+    <string name="menu_rc4">RC4</string>
+    <string name="menu_elgamal">El Gamal</string>
+    <string name="input_message">Сообщение</string>
+    <string name="input_from_num">Число от …</string>
+    <string name="input_to_num">Число до …</string>
+    <string name="button_start">СТАРТ</string>
+    <string name="input_key">Ключ</string>
+    <string name="background">background</string>
+    <string name="title_rsa">RSA</string>
+    <string name="title_rc4">RC4</string>
+    <string name="title_lg">El Gamal</string>
+</resources>
