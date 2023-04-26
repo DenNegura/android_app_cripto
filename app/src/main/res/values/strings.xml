@@ -22,4 +22,6 @@
     <string name="title_rsa">RSA</string>
     <string name="title_rc4">RC4</string>
     <string name="title_lg">El Gamal</string>
+    <string name="title_dh">Diffie–Hellman key exchange protocol</string>
+    <string name="menu_diffie_hellman">Diffie Hellman key protocol</string>
 </resources>

@@ -69,6 +69,8 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_elgamal:
                 intent = new Intent(MainActivity.this, ElGamalActivity.class);
                 break;
+            case R.id.nav_diffie_hellman:
+                intent = new Intent(MainActivity.this, DiffieHellmanKeyProtocolActivity.class);
         }
 
         startActivityForResult(intent, 101);

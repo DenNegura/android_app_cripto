@@ -16,5 +16,11 @@
             android:id="@+id/nav_elgamal"
             android:icon="@drawable/alghoritm"
             android:title="@string/menu_elgamal" />
+        <item
+            android:id="@+id/nav_diffie_hellman"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/alghoritm"
+            android:title="@string/menu_diffie_hellman" />
     </group>
 </menu>

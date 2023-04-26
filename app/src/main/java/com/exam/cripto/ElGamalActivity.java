@@ -25,8 +25,8 @@ public class ElGamalActivity extends AppCompatActivity {
 
         startButton.setOnClickListener(view -> {
             int message = Integer.parseInt(String.valueOf(messageView.getText()));
-            Integer from = Integer.parseInt(String.valueOf(numFromView.getText()));
-            Integer to = Integer.parseInt(String.valueOf(numToView.getText()));
+            int from = Integer.parseInt(String.valueOf(numFromView.getText()));
+            int to = Integer.parseInt(String.valueOf(numToView.getText()));
             try {
                 ElGamal elGamal = new ElGamal(message, from, to);
                 textView.setText(elGamal.getReport());
