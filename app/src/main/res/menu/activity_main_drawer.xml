@@ -22,5 +22,11 @@
             android:layout_height="wrap_content"
             android:icon="@drawable/alghoritm"
             android:title="@string/menu_diffie_hellman" />
+        <item
+            android:id="@+id/chaum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/alghoritm"
+            android:title="@string/chaum" />
     </group>
 </menu>

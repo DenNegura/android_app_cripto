@@ -71,6 +71,10 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_diffie_hellman:
                 intent = new Intent(MainActivity.this, DiffieHellmanKeyProtocolActivity.class);
+                break;
+            case R.id.chaum:
+                intent = new Intent(MainActivity.this, ChaumActivity.class);
+                break;
         }
 
         startActivityForResult(intent, 101);
