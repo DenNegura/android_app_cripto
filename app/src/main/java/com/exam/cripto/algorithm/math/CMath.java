@@ -109,8 +109,10 @@ public class CMath {
         return factors;
     }
 
-    public static long randomRange(long from, long to) {
-//        return new Random().nextLong(to - from) + from;
+    public static long randomRange(long from, long to) throws Exception {
+        if (from > to) {
+            throw new Exception(String.format("Верхняя граница (%d) меньше нижней (%d)", to, from));
+        }
         return Math.abs(new Random().nextLong()) % (to - from) + from;
     }
 

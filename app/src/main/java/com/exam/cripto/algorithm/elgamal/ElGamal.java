@@ -15,19 +15,26 @@ public class ElGamal {
 
     private Long privateKey;
 
-    private final StringBuilder report;
+    private StringBuilder report;
 
     public ElGamal() {
         report = new StringBuilder("Схема Эль-Гамаля.\n");
     }
 
     public ElGamal(int message, int numFrom, int numTo) throws Exception {
-        report = new StringBuilder("Схема Эль-Гамаля.\n");
-        generateKeys(numFrom, numTo);
-        List<Long> codingMessage = coding(message);
-        decoding(codingMessage);
-        List<Long> singMessage = sign((long) message);
-        checkSing((long) message, singMessage);
+        boolean totoEBene = false;
+        CMath.randomRange(numFrom, numTo);
+        while (!totoEBene) {
+            try {
+                report = new StringBuilder("Схема Эль-Гамаля.\n");
+                generateKeys(numFrom, numTo);
+                List<Long> codingMessage = coding(message);
+                decoding(codingMessage);
+                List<Long> singMessage = sign((long) message);
+                totoEBene = checkSing((long) message, singMessage);
+            } catch (Exception ignored) {
+            }
+        }
     }
 
     @SuppressLint("DefaultLocale")
@@ -95,7 +102,7 @@ public class ElGamal {
         return decodingMessage;
     }
 
-    public List<Long> sign(Long message) {
+    public List<Long> sign(Long message) throws Exception {
         long p = openKey.get(0);
         long g = openKey.get(1);
         long y = openKey.get(2);
@@ -140,8 +147,6 @@ public class ElGamal {
         report.append("1) Вычисляем хеш-функцию: h ( M ) = h (")
                 .append(message).append(") = m = ").append(digest).append("\n");
         report.append("2) Проверяем равенство уровнения: y^r * r^s mod p = g^m mod p\n");
-        System.out.println(CMath.modulo(y, r, p));
-        System.out.println(CMath.modulo(r, s, p));
         long part1 = (CMath.modulo(y, r, p) * CMath.modulo(r, s, p)) % p;
         long part2 = CMath.modulo(g, digest, p);
         report.append(String.format("2.1) Вычислим левую часть: y^r * r^s mod p = %d^%d * %d^%d mod %d = %d\n",

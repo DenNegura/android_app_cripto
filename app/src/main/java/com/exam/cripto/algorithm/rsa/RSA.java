@@ -102,7 +102,7 @@ public class RSA {
     }
 
 
-    private BigInteger getOpenExponent(BigInteger eulerFunction) {
+    private BigInteger getOpenExponent(BigInteger eulerFunction) throws Exception {
         List<BigInteger> primeArray = new ArrayList<>();
         int count = 0;
         BigInteger prime = nextPrime(4);
