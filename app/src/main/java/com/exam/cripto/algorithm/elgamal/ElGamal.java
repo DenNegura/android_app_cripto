@@ -26,6 +26,8 @@ public class ElGamal {
         generateKeys(numFrom, numTo);
         List<Long> codingMessage = coding(message);
         decoding(codingMessage);
+        List<Long> singMessage = sign((long) message);
+        checkSing((long) message, singMessage);
     }
 
     @SuppressLint("DefaultLocale")
@@ -91,6 +93,66 @@ public class ElGamal {
                         "b * (a ^ x) ^ -1 mod p = %d * (%d ^ %d) ^ -1 mod %d = %d - исходное сообщение.",
                 b.longValue(), a.longValue(), privateKey, p.longValue(), decodingMessage));
         return decodingMessage;
+    }
+
+    public List<Long> sign(Long message) {
+        long p = openKey.get(0);
+        long g = openKey.get(1);
+        long y = openKey.get(2);
+        report.append("\nПодпись сообщения:\n");
+        report.append("Имеем открытый ключ из пункта выше (p, g, y): (")
+                .append(p).append(", ").append(g).append(", ").append(y).append(") и приватный ключ x = ")
+                .append(privateKey).append("\n");
+        report.append("1) Вычисляется дайджест сообщения M: m = h(M). Где h - любая хеш функция.\n");
+        long digest = message.hashCode() % p;
+        report.append("дайджест сообщения \"").append(message)
+                .append("\" : m = h(M) = ").append(digest).append("\n");
+        long k = CMath.randomRange(1, p);
+        report.append("2) Выберем случайное целое число k такое, " +
+                "что выполняется условие 1 < k < p − 1. Пусть k = ").append(k).append("\n");
+        long r = CMath.modulo(g, k, p);
+        report.append("и число r = g ^ k mod p = ").append(g).append(" ^ ")
+                .append(k).append(" mod ").append(p).append(" = ").append(r).append("\n");
+        long kInverse = CMath.modularMultiplicativeInverse(k, p - 1);
+        report.append("3) Находим k^-1 - это" +
+                " мультипликативное обратное k по модулю p - 1: k^-1 mod p = ").append(kInverse).append("\n");
+        long s = (((digest - privateKey * r) * kInverse) % (p - 1) + (p - 1)) % (p - 1);
+        report.append("4) Находим число s = (m − xr) k^−1 (mod p − 1) = (")
+                .append(digest).append(" - ").append(privateKey).append(" * ")
+                .append(r).append(") * ").append(kInverse).append(" (mod ").append(p).append(") = ").append(s).append("\n");
+        report.append("5) Подписью сообщения M является пара (r, s) = (").append(r).append(", ").append(s).append(")\n");
+        List<Long> keys = new ArrayList<>();
+        keys.add(r);
+        keys.add(s);
+        return keys;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public boolean checkSing(Long message, List<Long> sign) {
+        long p = openKey.get(0);
+        long g = openKey.get(1);
+        long y = openKey.get(2);
+        long r = sign.get(0);
+        long s = sign.get(1);
+        report.append("\nПроверка подписи:\n");
+        System.out.println(message.hashCode());
+        long digest = message.hashCode() % p;
+        report.append("1) Вычисляем хеш-функцию: h ( M ) = h (")
+                .append(message).append(") = m = ").append(digest).append("\n");
+        report.append("2) Проверяем равенство уровнения: y^r * r^s mod p = g^m mod p\n");
+        System.out.println(CMath.modulo(y, r, p));
+        System.out.println(CMath.modulo(r, s, p));
+        long part1 = (CMath.modulo(y, r, p) * CMath.modulo(r, s, p)) % p;
+        long part2 = CMath.modulo(g, digest, p);
+        report.append(String.format("2.1) Вычислим левую часть: y^r * r^s mod p = %d^%d * %d^%d mod %d = %d\n",
+                y, r, r, s, p, part1));
+        report.append(String.format("2.2) Вычислим правую часть: g^m mod p = %d^%d mod %d = %d\n", g, digest, p, part2));
+        if(part1 == part2) {
+            report.append("Так как правая и левая части равны, то это означает что подпись верна.\n");
+        } else {
+            throw new RuntimeException("Непредвиденная ошибка, попробуйте ещё много много раз)");
+        }
+        return true;
     }
 
     public List<Long> getOpenKey() {

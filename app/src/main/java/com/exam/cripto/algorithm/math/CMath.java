@@ -138,16 +138,45 @@ public class CMath {
         return BigInteger.valueOf(i);
     }
 
-    public static Long modularMultiplicativeInverse(long number, long modulo) {
-        Long nextNumber = modulo / number;
-        while (true) {
-            nextNumber++;
-            if (nextNumber.equals(number)) {
-                continue;
-            }
-            if ((nextNumber * number) % modulo == 1) {
-                return nextNumber;
-            }
+//    public static Long modularMultiplicativeInverse(long number, long modulo) {
+//        Long nextNumber = modulo / number;
+//        while (true) {
+//            nextNumber++;
+//            if (nextNumber.equals(number)) {
+//                continue;
+//            }
+//            if ((nextNumber * number) % modulo == 1) {
+//                return nextNumber;
+//            }
+//        }
+//    }
+
+    public static Long modularMultiplicativeInverse(long num, long mod) {
+        long a = mod;
+        long b = num;
+        long x = 0;
+        long y = 1;
+        long lastX = 1;
+        long lastY = 0;
+        long temp;
+        while (b != 0) {
+            long q = a / b;
+            long r = a % b;
+
+            a = b;
+            b = r;
+
+            temp = x;
+            x = lastX - q * x;
+            lastX = temp;
+
+            temp = y;
+            y = lastY - q * y;
+            lastY = temp;
         }
+        if (lastY < 0) {
+            lastY += mod;
+        }
+        return lastY;
     }
 }
