@@ -10,13 +10,15 @@ public class RC4 {
 
     private int y;
 
+    private final static int BYTE_COUNT = 128;
+
     private final StringBuilder report;
 
     public RC4(String key, String message) {
         this(key);
         report.append("Потоковый шифр RC4.\n    Ключ: \"")
                 .append(key).append("\" - от 8 до 2048 бит,\n    Сообщение: \"")
-                .append(message).append("\"\n\n");
+                .append(message).append("\" - ").append(toHex(message.getBytes())).append("\n\n");
         report.append("Инициализация RC4 состоит из двух частей:\n" +
                 "инициализация S-блока;\n" +
                 "генерация псевдослучайного слова K.\n" +
@@ -46,7 +48,7 @@ public class RC4 {
         for (byte b : encodeString(message)) {
             encodingMessage.append((char) b);
         }
-        report.append("Зашифрованное сообщение: ").append(encodingMessage);
+        report.append("Зашифрованное сообщение: ").append(toHex(encodingMessage.toString().getBytes()));
         init(key.getBytes());
         report.append("\n\n").append("Расшифровывание:\n" +
                 "1. Повторно создаётся (регенерируется) поток битов ключа Ki\n" +
@@ -66,35 +68,37 @@ public class RC4 {
     }
 
     private void init(byte[] key) {
-        S = new byte[256];
+        S = new byte[BYTE_COUNT];
         x = 0;
         y = 0;
         int keyLen = key.length;
 
-        for (int i = 0; i < 128; i++) {
+        for (int i = 0; i < BYTE_COUNT; i++) {
             S[i] = (byte) i;
         }
 
         int j = 0;
-        for (int i = 0; i < 256; i++) {
-            j = (j + S[i] + key[i % keyLen]) % 256;
-            swap(S, i, j);
+        for (int i = 0; i < BYTE_COUNT; i++) {
+            System.out.println("j = " + j + "S[i] = " + S[i] + " key[i % keyLen] = " + key[i % keyLen]);
+            j = (j + S[i] + key[i % keyLen]) % BYTE_COUNT;
+            System.out.println("i = " + i + " j = " + j);
+            swap(i, j);
         }
     }
 
-    private void swap(byte[] S, int i1, int i2) {
+    private void swap(int i1, int i2) {
         byte el = S[i1];
         S[i1] = S[i2];
         S[i2] = el;
     }
 
     private byte keyItem() {
-        x = (x + 1) % 256;
-        y = (y + S[x]) % 256;
+        x = (x + 1) % BYTE_COUNT;
+        y = (y + S[x]) % BYTE_COUNT;
 
-        swap(S, x, y);
+        swap(x, y);
 
-        return S[(S[x] + S[y]) % 256];
+        return S[(S[x] + S[y]) % BYTE_COUNT];
     }
 
     public byte[] encodeString(String message) {
@@ -110,7 +114,8 @@ public class RC4 {
         for (int m = 0; m < data.length; m++) {
             byte item = keyItem();
             cipher[m] = (byte) (data[m] ^ item);
-            report.append(String.format("C[%d] = K[%d] ^ m[%d] : %d = %d ^ %d\n", m, m, m, cipher[m], data[m], item));
+            report.append(String.format("C[%d] = K[%d] ^ m[%d] : %s = %s ^ %s\n",
+                    m, m, m, toHex(cipher[m]), toHex(data[m]), toHex(item)));
         }
 
         return cipher;
@@ -131,4 +136,18 @@ public class RC4 {
     public String getReport() {
         return report.toString();
     }
+
+
+    private String toHex(byte b) {
+        return "0x" + Integer.toHexString(b);
+    }
+
+    private String toHex(byte[] b) {
+        StringBuilder bites = new StringBuilder();
+        for(byte i: b) {
+            bites.append(toHex(i)).append(" ");
+        }
+        return bites.toString();
+    }
+
 }
