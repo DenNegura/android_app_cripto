@@ -25,4 +25,5 @@
     <string name="title_dh">Diffie–Hellman key exchange protocol</string>
     <string name="menu_diffie_hellman">Diffie Hellman key protocol</string>
     <string name="chaum">Протокол подписи Chaum</string>
+    <string name="definitions">Определения</string>
 </resources>

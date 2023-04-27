@@ -75,6 +75,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.chaum:
                 intent = new Intent(MainActivity.this, ChaumActivity.class);
                 break;
+            case R.id.definition:
+                intent = new Intent(MainActivity.this, DefinitionActivity.class);
+                break;
         }
 
         startActivityForResult(intent, 101);
